@@ -5,15 +5,21 @@ import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 function ImageGallery({ images, onOpen }) {
   return (
     <ul className="ImageGallery">
-      {images.map(image => (
-        <ImageGalleryItem image={image} key={image.id} onClick={onOpen} />
+      {images.map((image, index) => (
+        <ImageGalleryItem image={image} key={index} onOpen={onOpen} />
       ))}
     </ul>
   );
 }
 
 ImageGallery.propTypes = {
-  images: PropTypes.array.isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    }),
+  ),
   onOpen: PropTypes.func.isRequired,
 };
 

@@ -43,6 +43,7 @@ class Modal extends Component {
             width="1200px"
             height="800px"
           />
+          {/* {this.props.children} */}
         </div>
       </div>,
       modalRoot,
