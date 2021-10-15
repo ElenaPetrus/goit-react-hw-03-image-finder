@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import { Searchbar } from './components/Searchbar/Searchbar';
 import { ImageGallery } from './components/ImageGallery/ImageGallery';
@@ -24,7 +24,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
-    if (prevState.page !== page) {
+    if (prevState.query !== query || prevState.page !== page) {
       this.setState({ status: 'pending' });
       getPictures(query, page)
         .catch(error => this.setState({ error, status: 'rejected' }))
@@ -38,23 +38,9 @@ class App extends Component {
     }
   }
 
-  handlChangeQuery = e => {
-    // console.log(e.currentTarget.value);
-    this.setState({
-      [e.currentTarget.name]: e.currentTarget.value,
-    });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    this.resetState();
-    if (this.state.query.trim() === '') {
-      toast.error('Nothing for request! Please type the word');
-      return;
-    }
-    getPictures(this.state.query, this.state.page).then(response =>
-      this.setState({ setOfImages: response, status: 'resolved' }),
-    );
+  handleSearchbarSubmit = query => {
+    console.log(query);
+    this.setState({ query });
   };
 
   resetState = () => {
@@ -97,8 +83,8 @@ class App extends Component {
       <div>
         <Searchbar
           query={this.state.query}
-          handleChange={this.handlChangeQuery}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handleSearchbarSubmit}
+          resetState={this.resetState}
         />
 
         <ImageGallery
