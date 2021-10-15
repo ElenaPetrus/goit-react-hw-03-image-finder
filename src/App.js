@@ -24,7 +24,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
-    if (prevState.query !== query) {
+    if (prevState.page !== page) {
       this.setState({ status: 'pending' });
       getPictures(query, page)
         .catch(error => this.setState({ error, status: 'rejected' }))
@@ -48,7 +48,6 @@ class App extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.resetState();
-
     if (this.state.query.trim() === '') {
       toast.error('Nothing for request! Please type the word');
       return;
