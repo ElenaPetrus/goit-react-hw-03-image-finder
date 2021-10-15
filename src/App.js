@@ -23,13 +23,6 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { query, page } = this.state;
-    if (prevState.query !== query || prevState.page !== page) {
-      this.setState({ status: 'pending' });
-      getPictures(query, page)
-        .catch(error => this.setState({ error, status: 'rejected' }))
-        .finally(() => this.setState({ loading: false }));
-    }
     if (this.state.page > 1) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
@@ -39,8 +32,11 @@ class App extends Component {
   }
 
   handleSearchbarSubmit = query => {
-    console.log(query);
-    this.setState({ query });
+    this.setState({ query, status: 'pending', page: 1 });
+    getPictures(query, 1)
+      .then(arr => this.setState({ setOfImages: arr }))
+      .catch(error => this.setState({ error, status: 'rejected' }))
+      .finally(() => this.setState({ loading: false }));
   };
 
   resetState = () => {
@@ -53,7 +49,7 @@ class App extends Component {
 
   onLoadMore = () => {
     const { query, page } = this.state;
-    getPictures(query, page).then(img =>
+    getPictures(query, page + 1).then(img =>
       this.setState(prevState => ({
         setOfImages: [...prevState.setOfImages, ...img],
         page: prevState.page + 1,
